@@ -35,4 +35,4 @@ Open the live demo: https://domvaske36.github.io/crossfit-timer/
 
 ---
 
-Built as a learning project to practice JavaScript timers, DOM manipulation, and event handling.
+Built as a learning project to practice JavaScript timers, DOM manipulation, and event handling.SSH authentication working!
