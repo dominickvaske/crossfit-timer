@@ -25,7 +25,7 @@ A web-based timer application for CrossFit workouts built with basic HTML, CSS, 
 
 ## Demo
 
-Open the live demo: [Adding GitHub Pages link here later]
+Open the live demo: https://domvaske36.github.io/crossfit-timer/
 
 ## Technologies Used
 
