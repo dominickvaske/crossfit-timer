@@ -19,13 +19,22 @@
       <select id="workout_type">
         <option value="amrap">AMRAP</option>
         <option value="for_time">FOR TIME</option>
+        <option value="emom">EMOM</option>
+        <option value="tabata">TABATA</option>
       </select>
 
-      <div class="input">
+      <div id="amrap_input">
         Workout Time (minutes): <br />
         <input id="time_input" placeholder="Enter Time" />
       </div>
       <br />
+
+      <div id="emom_input" class="hidden">
+        <label>Round Length (minutes):</label>
+        <input id="emom_round_length" value="1" />
+        <label>Total Rounds:</label>
+        <input id="emom_total_rounds" value="10" />
+      </div>
 
       <div class="timer">00:00</div>
       <br />

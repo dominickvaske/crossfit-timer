@@ -55,9 +55,27 @@ function startAmrapTimer() {
  */
 function startForTimeTimer() {
   timerInterval = setInterval(function () {
+    // timeInput.classList.add("hidden");
     seconds = seconds + 1;
     updateDisplay();
   }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  isRunning = false;
+  const workoutType = workoutSelect.value;
+  if (workoutType == "amrap") {
+    seconds = lastKnownTime;
+  } else if (workoutType == "for_time") {
+    seconds = 0;
+  } else if (workoutType == "emom") {
+    seconds = 60;
+  } else if (workoutType == "tabata") {
+    seconds = 20;
+  }
+
+  updateDisplay();
 }
 
 // ========== EVENT LISTENERS ==========
@@ -111,17 +129,41 @@ pauseButton.addEventListener("click", function () {
  * Stops timer and returns to starting time based on workout type
  */
 resetButton.addEventListener("click", function () {
-  clearInterval(timerInterval);
-  isRunning = false;
+  // clearInterval(timerInterval);
+  // isRunning = false;
 
+  // const workoutType = workoutSelect.value;
+  // if (workoutType === "amrap") {
+  //   seconds = lastKnownTime; // Reset to original AMRAP time
+  // } else if (workoutType === "for_time") {
+  //   seconds = 0; // Reset FOR TIME back to 00:00
+  // }
+
+  // updateDisplay();
+  resetTimer();
+});
+
+/**
+ * Hide input features based on the type of workout selected
+ */
+workoutSelect.addEventListener("change", function () {
+  resetTimer();
   const workoutType = workoutSelect.value;
-  if (workoutType === "amrap") {
-    seconds = lastKnownTime; // Reset to original AMRAP time
-  } else if (workoutType === "for_time") {
-    seconds = 0; // Reset FOR TIME back to 00:00
-  }
 
-  updateDisplay();
+  //grab elements to hide
+  const amrapInput = document.querySelector("#amrap_input");
+  const emomInput = document.querySelector("#emom_input");
+
+  //start with clean slate by hiding all inputs
+  amrapInput.classList.add("hidden");
+  emomInput.classList.add("hidden");
+
+  //add in correct inputs based on selected workout type
+  if (workoutType == "amrap") {
+    amrapInput.classList.remove("hidden");
+  } else if (workoutType == "emom") {
+    emomInput.classList.remove("hidden");
+  }
 });
 
 // ========== INITIALIZATION ==========
