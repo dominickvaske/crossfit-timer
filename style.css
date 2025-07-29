@@ -34,9 +34,8 @@ h1 {
   font-weight: bold;
   font-family: "Courier New", monospace;
   color: white;
-  margin: 20px;
   font-size: 4em;
-  margin: 30px 0;
+  margin: 10px 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -95,7 +94,7 @@ button {
   display: flex;
   gap: 5px;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 0px;
 }
 
 #start_button {
@@ -121,4 +120,72 @@ button {
 
 .hidden {
   display: none;
+}
+
+#emom_input {
+  font-size: 1.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+#emom_round_length {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 25px;
+  font-size: 1.1em;
+  text-align: center;
+  width: 200px;
+  cursor: text;
+  margin: 10px;
+}
+
+#emom_total_rounds {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 25px;
+  font-size: 1.1em;
+  text-align: center;
+  width: 200px;
+  cursor: text;
+  margin: 10px;
+}
+
+.round_display {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 20px 0 10px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#tabata_input {
+  font-size: 1.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+#tabata_detail {
+  line-height: 1.5;
+}
+
+.short-line {
+  width: 50%; /* Example: 50% of its parent container's width */
+  height: 5px;
+  background-color: white;
+  margin-left: auto; /* Centers the line if width is less than 100% */
+  margin-right: auto; /* Centers the line if width is less than 100% */
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.footer {
+  font-family: "Great Vibes", cursive;
+  margin-top: 30px;
+  font-size: 1em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: white;
 }

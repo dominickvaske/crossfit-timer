@@ -29,11 +29,28 @@
       </div>
       <br />
 
-      <div id="emom_input" class="hidden">
+      <div id="emom_input" class="emom hidden">
         <label>Round Length (minutes):</label>
         <input id="emom_round_length" value="1" />
+        <br />
         <label>Total Rounds:</label>
         <input id="emom_total_rounds" value="10" />
+
+        <div class="round_display">
+          Round <span id="current_round">1</span> of
+          <span id="total_rounds">10</span>
+        </div>
+      </div>
+
+      <div id="tabata_input" class="tabata hidden">
+        <span id="tabata_detail">8 Rounds: <br />Work (20s) / Rest (10s)</span>
+        <hr class="short-line" />
+        <div id="tabata_status">WORK</div>
+        <br />
+        <div class="tabata_round_display">
+          Round <span id="tabata_round">1</span> of
+          <span id="tabata_total_rounds">8</span>
+        </div>
       </div>
 
       <div class="timer">00:00</div>
@@ -44,6 +61,7 @@
         <button id="pause_button">Pause</button>
         <button id="reset_button">Reset</button>
       </div>
+      <div class="footer">#stayRADD</div>
     </div>
 
     <!-------------------------- JavaScript ------------------------------>

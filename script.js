@@ -7,10 +7,14 @@ const timeInput = document.querySelector("#time_input");
 const workoutSelect = document.querySelector("#workout_type");
 
 // ========== GLOBAL VARIABLES ==========
-let seconds = 0; // Current time in seconds
-let lastKnownTime = 0; // Starting time for AMRAP workouts (for reset)
+let seconds = 600; // Current time in seconds
+let lastKnownTime = 600; // Starting time for AMRAP workouts (for reset)
 let isRunning = false; // Track if timer is currently active
 let timerInterval; // Store interval ID for clearing
+let currentRound = 1;
+let maxRounds = 10;
+let isWorkTime = true; //track if workinging (true) or resting (false)
+let tabataRound = 1; //starting round 1
 
 // ========== UTILITY FUNCTIONS ==========
 
@@ -29,6 +33,22 @@ function updateDisplay() {
   } else {
     timerDisplay.textContent = minutes + ":" + remainingSeconds;
   }
+}
+
+function updateRoundDisplay() {
+  const totalRounds = document.getElementById("emom_total_rounds").value;
+
+  maxRounds = parseInt(totalRounds);
+
+  document.getElementById("current_round").textContent = currentRound;
+  document.getElementById("total_rounds").textContent = maxRounds;
+}
+
+function updateTabataDisplay() {
+  document.getElementById("tabata_status").textContent = isWorkTime
+    ? "WORK"
+    : "REST";
+  document.getElementById("tabata_round").textContent = tabataRound;
 }
 
 /**
@@ -55,12 +75,75 @@ function startAmrapTimer() {
  */
 function startForTimeTimer() {
   timerInterval = setInterval(function () {
-    // timeInput.classList.add("hidden");
     seconds = seconds + 1;
     updateDisplay();
   }, 1000);
 }
 
+/**
+ * Starts EMOM stopwatch timer
+ * Counts down from round length to 0 each time
+ */
+function startEMOMTimer(roundLength, totalRounds) {
+  timerInterval = setInterval(function () {
+    seconds = seconds - 1;
+    updateDisplay();
+
+    if (seconds <= 0) {
+      currentRound++;
+      updateRoundDisplay();
+      if (currentRound > maxRounds) {
+        //workout is finished
+        clearInterval(timerInterval);
+        isRunning = false;
+        alert("EMOM Complete! ${maxRounds} rounds finished!");
+      } else {
+        //start next round - READ FRESH VALUE HERE
+        const roundLength =
+          parseInt(document.getElementById("emom_round_length").value) * 60;
+        seconds = roundLength;
+      }
+    }
+  }, 1000);
+}
+
+/**
+ * Start Tabata stopwatch timer
+ * Alternates between 20 seconds of work and 10 seconds of rest
+ */
+function startTabataTimer() {
+  timerInterval = setInterval(function () {
+    seconds = seconds - 1;
+    updateDisplay();
+
+    if (seconds <= 0) {
+      if (isWorkTime) {
+        // Work phase ended, start rest
+        isWorkTime = false;
+        seconds = 10; // Rest time
+      } else {
+        // Rest phase ended
+        tabataRound++;
+        if (tabataRound > 8) {
+          // Workout complete
+          clearInterval(timerInterval);
+          isRunning = false;
+          alert("Tabata Complete! Great workout!");
+          return;
+        } else {
+          // Start next work phase
+          isWorkTime = true;
+          seconds = 20; // Work time
+        }
+      }
+      updateTabataDisplay();
+    }
+  }, 1000);
+}
+
+/**
+ * Reset the timer to the appropriate amount depending on the workout type
+ */
 function resetTimer() {
   clearInterval(timerInterval);
   isRunning = false;
@@ -70,9 +153,19 @@ function resetTimer() {
   } else if (workoutType == "for_time") {
     seconds = 0;
   } else if (workoutType == "emom") {
-    seconds = 60;
+    // Get current round length from input
+    const roundLength =
+      parseInt(document.getElementById("emom_round_length").value) * 60;
+    seconds = roundLength;
+    currentRound = 1;
+    updateRoundDisplay(); // This will update maxRounds from input
   } else if (workoutType == "tabata") {
     seconds = 20;
+    isWorkTime = true;
+    tabataRound = 1;
+    if (document.getElementById("tabata_status")) {
+      updateTabataDisplay();
+    }
   }
 
   updateDisplay();
@@ -112,6 +205,34 @@ startButton.addEventListener("click", function () {
     isRunning = true;
     clearInterval(timerInterval); // Clear any existing timer
     startForTimeTimer();
+  } else if (workoutType == "emom") {
+    const roundLength =
+      parseInt(document.getElementById("emom_round_length").value) * 60;
+    const totalRounds = parseInt(
+      document.getElementById("emom_total_rounds").value
+    );
+
+    //set initial state
+    if (!isRunning) {
+      seconds = roundLength;
+      currentRound = 1;
+      maxRounds = totalRounds;
+    }
+
+    isRunning = true;
+    clearInterval(timerInterval);
+    startEMOMTimer();
+  } else if (workoutType === "tabata") {
+    if (!isRunning) {
+      seconds = 20;
+      isWorkTime = true;
+      tabataRound = 1;
+      updateTabataDisplay();
+    }
+
+    isRunning = true;
+    clearInterval(timerInterval);
+    startTabataTimer();
   }
 });
 
@@ -129,17 +250,6 @@ pauseButton.addEventListener("click", function () {
  * Stops timer and returns to starting time based on workout type
  */
 resetButton.addEventListener("click", function () {
-  // clearInterval(timerInterval);
-  // isRunning = false;
-
-  // const workoutType = workoutSelect.value;
-  // if (workoutType === "amrap") {
-  //   seconds = lastKnownTime; // Reset to original AMRAP time
-  // } else if (workoutType === "for_time") {
-  //   seconds = 0; // Reset FOR TIME back to 00:00
-  // }
-
-  // updateDisplay();
   resetTimer();
 });
 
@@ -153,18 +263,46 @@ workoutSelect.addEventListener("change", function () {
   //grab elements to hide
   const amrapInput = document.querySelector("#amrap_input");
   const emomInput = document.querySelector("#emom_input");
+  const tabataInput = document.querySelector("#tabata_input");
 
   //start with clean slate by hiding all inputs
   amrapInput.classList.add("hidden");
   emomInput.classList.add("hidden");
+  tabataInput.classList.add("hidden");
 
   //add in correct inputs based on selected workout type
   if (workoutType == "amrap") {
     amrapInput.classList.remove("hidden");
   } else if (workoutType == "emom") {
     emomInput.classList.remove("hidden");
+    currentRound = 1; //reset to round 1
+    updateRoundDisplay();
+  } else if (workoutType == "tabata") {
+    tabataInput.classList.remove("hidden");
   }
 });
+
+/**
+ * updating round length and total rounds when user provides new input
+ */
+document
+  .getElementById("emom_round_length")
+  .addEventListener("change", function () {
+    updateRoundDisplay();
+
+    // If timer is not running, update the timer display too
+    if (!isRunning) {
+      const roundLength = parseInt(this.value) * 60;
+      seconds = roundLength;
+      updateDisplay();
+    }
+  });
+
+document
+  .getElementById("emom_total_rounds")
+  .addEventListener("change", function () {
+    updateRoundDisplay();
+  });
 
 // ========== INITIALIZATION ==========
 // Set initial display
