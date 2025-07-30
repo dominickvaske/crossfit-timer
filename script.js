@@ -64,6 +64,8 @@ function startAmrapTimer() {
     if (seconds <= 0) {
       clearInterval(timerInterval);
       isRunning = false;
+      startButton.textContent = "START";
+      startButton.classList.remove("running");
       alert("Time's up! Great workout!");
     }
   }, 1000);
@@ -96,6 +98,8 @@ function startEMOMTimer(roundLength, totalRounds) {
         //workout is finished
         clearInterval(timerInterval);
         isRunning = false;
+        startButton.textContent = "START";
+        startButton.classList.remove("running");
         alert("EMOM Complete! ${maxRounds} rounds finished!");
       } else {
         //start next round - READ FRESH VALUE HERE
@@ -128,6 +132,8 @@ function startTabataTimer() {
           // Workout complete
           clearInterval(timerInterval);
           isRunning = false;
+          startButton.textContent = "START";
+          startButton.classList.remove("running");
           alert("Tabata Complete! Great workout!");
           return;
         } else {
@@ -180,7 +186,8 @@ function resetTimer() {
 startButton.addEventListener("click", function () {
   const inputValue = timeInput.value;
   const workoutType = workoutSelect.value;
-
+  startButton.textContent = "RUNNING...";
+  startButton.classList.add("running");
   if (workoutType === "amrap") {
     // Only set new time if starting fresh (not resuming from pause)
     if (!isRunning && seconds === lastKnownTime) {
@@ -243,6 +250,8 @@ startButton.addEventListener("click", function () {
 pauseButton.addEventListener("click", function () {
   clearInterval(timerInterval);
   isRunning = false;
+  startButton.textContent = "START";
+  startButton.classList.remove("running");
 });
 
 /**
@@ -251,6 +260,8 @@ pauseButton.addEventListener("click", function () {
  */
 resetButton.addEventListener("click", function () {
   resetTimer();
+  startButton.textContent = "START";
+  startButton.classList.remove("running");
 });
 
 /**

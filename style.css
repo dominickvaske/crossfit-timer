@@ -88,6 +88,8 @@ button {
   transition: all 0.3s ease;
   text-transform: uppercase;
   margin: 0 5px;
+  width: 140px;
+  text-align: center;
 }
 
 .button_container {
@@ -188,4 +190,10 @@ button {
   font-size: 1em;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   color: white;
+}
+
+.running {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(76, 175, 80, 1) !important;
+  color: rgba(76, 175, 80, 1) !important;
 }
